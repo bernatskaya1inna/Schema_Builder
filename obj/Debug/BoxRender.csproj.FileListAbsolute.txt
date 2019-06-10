@@ -1,0 +1,7 @@
+C:\Users\Инна\source\repos\Console\Console\bin\Debug\Console.exe.config
+C:\Users\Инна\source\repos\Console\Console\bin\Debug\Console.exe
+C:\Users\Инна\source\repos\Console\Console\bin\Debug\Console.pdb
+C:\Users\Инна\source\repos\Console\Console\obj\Debug\BoxRender.csprojAssemblyReference.cache
+C:\Users\Инна\source\repos\Console\Console\obj\Debug\BoxRender.csproj.CoreCompileInputs.cache
+C:\Users\Инна\source\repos\Console\Console\obj\Debug\Console.exe
+C:\Users\Инна\source\repos\Console\Console\obj\Debug\Console.pdb
