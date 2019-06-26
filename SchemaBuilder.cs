@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -45,24 +45,24 @@ namespace BoxRender
             graph.DrawRectangle(pen, parentRectangle.X, parentRectangle.Y, parentRectangle.Width, parentRectangle.Height);
             IEnumerable<XElement> attachedElements = FirstItem.Elements("attachedPanels");
 
-            DrawScan(attachedElements.First(), ref parentRectangle, ref bmp, ref graph, ref pen);
+            DrawScan(attachedElements.First(), parentRectangle, bmp, graph, pen);
 
             bmp.Save($"{nameOfXMLFile}.png", ImageFormat.Png);
             System.Console.WriteLine($"{nameOfXMLFile} is ready.");
         }
 
-        private void DrawScan(XElement attachedElement, ref Rectangle parentRectangle, ref Bitmap bmp, ref Graphics graph, ref Pen pen)
+        private void DrawScan(XElement attachedElement, Rectangle parentRectangle, Bitmap bmp, Graphics graph, Pen pen)
         {
             IEnumerable<XElement> attachedItems = attachedElement.Elements("item");
 
             foreach (XElement attachedItem in attachedItems)
             {
                 var childRectangle = CreateRectangle(attachedItem);
-                CalcRectangle(ref childRectangle, ref parentRectangle);
-                graph.DrawRectangle(pen, childRectangle.X + childRectangle.HingeOffset, childRectangle.Y, childRectangle.Width, childRectangle.Height);
+                CalcRectangle(childRectangle, parentRectangle);
+                graph.DrawRectangle(pen, childRectangle.X + childRectangle.HingeOffset, childRectangle.Y+childRectangle.HingeOffset, childRectangle.Width, childRectangle.Height);
                 if (attachedItem.Element("attachedPanels") != null)
                 {
-                    DrawScan(attachedItem.Element("attachedPanels"), ref childRectangle, ref bmp, ref graph, ref pen);
+                    DrawScan(attachedItem.Element("attachedPanels"), childRectangle, bmp, graph, pen);
                 }
             }
         }
@@ -91,14 +91,14 @@ namespace BoxRender
             childRectangle.AttachedToSide = side;
             return side;
         }
-        private void RotateRectangle(ref Rectangle childRectangle)
+        private void RotateRectangle(Rectangle childRectangle)
         {
             float RectangleWidth = childRectangle.Width;
             float RectangleHeight = childRectangle.Height;
             childRectangle.Width = RectangleHeight;
             childRectangle.Height = RectangleWidth;
         }
-        private int CalcRectngleCoords(ref Rectangle childRectangle, ref int side, ref Rectangle parentRectangle)
+        private int CalcRectngleCoords(Rectangle childRectangle,  int side,  Rectangle parentRectangle)
         {
             float rootWidth = parentRectangle.Width;
             float rootHeight = parentRectangle.Height;
@@ -129,16 +129,16 @@ namespace BoxRender
             return side;
         }
 
-        private void CalcRectangle(ref Rectangle childRectangle, ref Rectangle parentRectangle)
+        private void CalcRectangle(Rectangle childRectangle, Rectangle parentRectangle)
         {
             int side = CalcAttachedToSide(parentRectangle, childRectangle);
 
             if (side % 2 == 1)
             {
-                RotateRectangle(ref childRectangle);
+                RotateRectangle(childRectangle);
             }
 
-            side = CalcRectngleCoords(ref childRectangle, ref side, ref parentRectangle);
+            side = CalcRectngleCoords(childRectangle, side, parentRectangle);
         }
 
         private Rectangle CreateRectangle(XElement element)
